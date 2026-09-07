@@ -156,6 +156,7 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:7
 .hmi-row .nm{display:flex;align-items:center;gap:11px;font-weight:500}
 .hmi-row .vl{font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.1em;color:var(--led)}
 .hmi-row .vl.am{color:var(--amber)}
+.led.am{background:var(--amber);box-shadow:0 0 10px var(--amber)}
 .hmi-row .vl.fault{color:#ff4d5a;text-shadow:0 0 8px rgba(255,77,90,.45)}
 .led.fault{background:#ff4d5a;box-shadow:0 0 10px #ff4d5a}
 .hmi-foot{display:flex;justify-content:space-between;padding:11px 16px;border-top:1px solid var(--line);background:rgba(5,11,20,.6);font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.1em;color:var(--muted);position:relative;z-index:2}
@@ -390,7 +391,7 @@ footer{background:var(--void);border-top:1px solid var(--line);padding:52px 0 26
         <div class="hmi-row"><span class="nm"><span class="led"></span> PLC Troubleshooting</span><span class="vl">RUNNING</span></div>
         <div class="hmi-row"><span class="nm"><span class="led"></span> Commissioning</span><span class="vl">RUNNING</span></div>
         <div class="hmi-row"><span class="nm"><span class="led"></span> PLC Migrations</span><span class="vl">RUNNING</span></div>
-        <div class="hmi-row"><span class="nm"><span class="led"></span> Legacy Systems</span><span class="vl">ACTIVE</span></div>
+        <div class="hmi-row"><span class="nm"><span class="led am"></span> Legacy Systems</span><span class="vl am">ACTIVE</span></div>
         <div class="hmi-row"><span class="nm"><span class="led fault"></span> Automated Drawings</span><span class="vl fault">FAULT</span></div>
       </div>
       <div class="hmi-foot"><span>SCAN: <span id="scan">0000</span> ms</span><span id="clk">--:--:--</span></div>
@@ -415,7 +416,6 @@ footer{background:var(--void);border-top:1px solid var(--line);padding:52px 0 26
       <h3>System down right now?</h3>
       <p>Every hour of downtime costs money. You'll get a controls integrator on the phone — not a call center, not a ticket number.</p>
     </div>
-    <a href="tel:4077442043" class="btn lg">Call 407 744 2043</a>
   </div>
 </div>
 
@@ -543,7 +543,7 @@ footer{background:var(--void);border-top:1px solid var(--line);padding:52px 0 26
 
     <div class="rev-cta rv">
       <p>Want to talk to a reference before you hire? Ask — we'll put you in touch with a client running a similar system.</p>
-      <a href="tel:4077442043" class="btn lg">Request a Reference</a>
+      <a href="#contact" class="btn lg">Request a Reference</a>
     </div>
   </div>
 </section>
@@ -556,8 +556,7 @@ footer{background:var(--void);border-top:1px solid var(--line);padding:52px 0 26
     <h2 class="rv">Need it on paper?</h2>
     <p class="rv">Get the one-click capability statement with full service scope, platforms supported, and contact info — ready to forward to procurement or your GC.</p>
     <div class="row rv">
-      <a href="mailto:benjamin.cummings@brcontrolsllc.com?subject=Capability%20Statement%20Request" class="btn lg">Request Capability Statement</a>
-      <a href="tel:4077442043" class="btn lg ghost">Call 407 744 2043</a>
+      <a href="BR-Controls-Capability-Statement.pdf" class="btn lg" download>Download Capability Statement</a>
     </div>
   </div>
 </section>
