@@ -155,6 +155,8 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:7
 .hmi-row .nm{display:flex;align-items:center;gap:11px;font-weight:500}
 .hmi-row .vl{font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.1em;color:var(--led)}
 .hmi-row .vl.am{color:var(--amber)}
+.hmi-row .vl.fault{color:#ff4d5a;text-shadow:0 0 8px rgba(255,77,90,.45)}
+.led.fault{background:#ff4d5a;box-shadow:0 0 10px #ff4d5a}
 .hmi-foot{display:flex;justify-content:space-between;padding:11px 16px;border-top:1px solid var(--line);background:rgba(5,11,20,.6);font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.1em;color:var(--muted);position:relative;z-index:2}
 
 /* ---------- stat band ---------- */
@@ -384,11 +386,12 @@ footer{background:var(--void);border-top:1px solid var(--line);padding:52px 0 26
         <span class="dots"><i></i><i></i><i></i></span>
       </div>
       <div class="hmi-body">
-        <div class="hmi-row"><span class="nm"><span class="led"></span> Emergency Controls Support</span><span class="vl">READY</span></div>
-        <div class="hmi-row"><span class="nm"><span class="led"></span> PLC Troubleshooting</span><span class="vl">READY</span></div>
-        <div class="hmi-row"><span class="nm"><span class="led"></span> Commissioning</span><span class="vl">READY</span></div>
-        <div class="hmi-row"><span class="nm"><span class="led"></span> PLC Migrations</span><span class="vl">READY</span></div>
-        <div class="hmi-row"><span class="nm"><span class="led"></span> Legacy Systems</span><span class="vl am">SPECIALTY</span></div>
+        <div class="hmi-row"><span class="nm"><span class="led"></span> Emergency Controls Support</span><span class="vl">RUNNING</span></div>
+        <div class="hmi-row"><span class="nm"><span class="led"></span> PLC Troubleshooting</span><span class="vl">RUNNING</span></div>
+        <div class="hmi-row"><span class="nm"><span class="led"></span> Commissioning</span><span class="vl">RUNNING</span></div>
+        <div class="hmi-row"><span class="nm"><span class="led"></span> PLC Migrations</span><span class="vl">RUNNING</span></div>
+        <div class="hmi-row"><span class="nm"><span class="led"></span> Legacy Systems</span><span class="vl">ACTIVE</span></div>
+        <div class="hmi-row"><span class="nm"><span class="led fault"></span> Automated Drawings</span><span class="vl fault">FAULT</span></div>
       </div>
       <div class="hmi-foot"><span>SCAN: <span id="scan">0000</span> ms</span><span id="clk">--:--:--</span></div>
     </div>
