@@ -36,6 +36,9 @@ test('settings submenu and company toggle work', async ({ page }) => {
   await page.locator('#settingsSubmenu').getByRole('button', { name: 'Billing' }).click();
   await expect(page.locator('[data-panel="Billing"]')).toBeVisible();
   await expect(page.locator('[data-panel="Billing"]')).toContainText('$15 per I/O point');
+  await expect(page.locator('[data-panel="Billing"]')).toContainText('all .DWG drawing files');
+  await expect(page.locator('[data-panel="Billing"]')).toContainText('cannot reasonably distinguish between a revision and a different project');
+  await expect(page.locator('[data-panel="Billing"]')).not.toContainText('Flat revision fee');
 });
 test('additional tools open without a project', async ({ page }) => {
   await page.getByRole('button', { name: 'Additional Tools +' }).click();
