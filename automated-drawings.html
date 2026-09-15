@@ -26,11 +26,12 @@
     @media(min-width:931px){.mobmenu{display:none!important}}
     @media(max-width:700px){.stage-bar{align-items:flex-start;flex-direction:column}.stage-actions{width:100%;justify-content:space-between}.builder-summary{grid-template-columns:repeat(2,1fr)}.summary-item:nth-child(2){border-right:0}.summary-item:nth-child(-n+2){border-bottom:1px solid var(--line)}}
     @media(max-width:560px){.wrap{width:min(100% - 32px,1160px)}.topbar .status b{display:none}.intro h1{font-size:2.55rem}.panel-body{padding:21px}.drop{padding:34px 15px}.navlinks .btn{padding:10px 16px}.device-grid{grid-template-columns:repeat(2,1fr)}.workbench-head{align-items:flex-start;flex-direction:column}.bulkbar{align-items:stretch}.range-tools{width:100%;grid-template-columns:1fr 1fr}.tool-btn{flex:1}.point-table{font-size:.67rem}.point-table th:nth-child(5),.point-table td:nth-child(5){display:none}}
+    .fault-status .led{background:#ff4b4b;box-shadow:0 0 10px #ff4b4b}.fault-status b{color:#ff4b4b}
     :focus-visible{outline:2px solid var(--blue);outline-offset:3px}
   </style>
 </head>
 <body>
-  <div class="topbar"><div class="wrap"><div class="status mono"><span class="led"></span> SYSTEM ONLINE — <b>AUTOMATED DRAWING INTAKE</b></div><a class="ph" href="tel:4077442043">407 744 2043</a></div></div>
+  <div class="topbar"><div class="wrap"><div class="status mono fault-status"><span class="led" aria-hidden="true"></span> SYSTEM FAULTED — <b>AUTOMATED DRAWING INTAKE</b></div></div></div>
   <nav><div class="wrap"><a class="brand" href="index.html" aria-label="BR Controls LLC home"><img src="logo.png" alt="BR Controls LLC"><span class="div"></span><span class="tl">Mission-Critical Controls Support</span></a><div class="navlinks"><a href="index.html#services">Services</a><a href="automated-drawings.html" aria-current="page">Automated Drawings</a><a href="index.html#why">Why Us</a><a href="index.html#contact">Contact</a><button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobmenu"><span></span><span></span><span></span></button></div></div><div class="mobmenu" id="mobmenu"><a href="index.html#services">Services</a><a href="automated-drawings.html">Automated Drawings</a><a href="index.html#why">Why Us</a><a href="index.html#contact">Contact</a></div></nav>
   <main>
     <section class="intro"><div class="wrap"><div class="eyebrow">BR-CTRL / Drawing Automation Pilot</div><h1>From I/O list to <span>drawing package.</span></h1><p>Start a controls drawing request by selecting your I/O list. BR Controls will review the file structure, confirm scope, and prepare the project for automated drawing generation.</p></div></section>
