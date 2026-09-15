@@ -53,9 +53,22 @@ const billingPanel=panels.querySelector('[data-panel="Billing"]');billingPanel.i
 </style>
 <script>
 const elementTypes=['Title Block','Cover Page','Symbol Library','Panel Layout','I/O List','BOM'];
+// Initialize shared navigation and warning elements before binding project controls.
+const primaryNavigation=document.querySelector('aside .nav');
+const projectsButton=primaryNavigation.querySelector('[data-view="Projects"]');
+primaryNavigation.querySelector('[data-view="Drawing Packages"]')?.remove();
+const projectSubnav=document.createElement('div');projectSubnav.className='project-subnav';projectSubnav.id='projectSubmenu';projectSubnav.hidden=true;
+['I/O Lists','Symbol Library','Title Blocks'].forEach(name=>primaryNavigation.querySelector('[data-view="'+name+'"]')?.remove());
+projectsButton.insertAdjacentElement('afterend',projectSubnav);projectsButton.setAttribute('aria-controls','projectSubmenu');projectsButton.setAttribute('aria-expanded','false');
+const unsavedNotice=document.createElement('div');unsavedNotice.className='notice';unsavedNotice.setAttribute('role','status');unsavedNotice.hidden=true;main.insertBefore(unsavedNotice,panels);
+const editableFields=Array.from(panels.querySelectorAll('input,select,textarea')).filter(field=>!field.disabled&&!field.readOnly);
+const initialValues=new Map(editableFields.map(field=>[field,['checkbox','radio'].includes(field.type)?field.checked:field.value]));let formDirty=false;
+function updateFormWarning(){formDirty=editableFields.some(field=>initialValues.get(field)!==(['checkbox','radio'].includes(field.type)?field.checked:field.value));unsavedNotice.hidden=!(formDirty||projectDataDirty);unsavedNotice.textContent='Unsaved changes: refreshing or closing this page will discard your projects and form entries. Account storage is not connected yet.';}
+panels.addEventListener('input',updateFormWarning);panels.addEventListener('change',updateFormWarning);
+window.addEventListener('beforeunload',event=>{if(formDirty){event.preventDefault();event.returnValue='';}});
 const projectRecords=[];let currentProject=null,projectDataDirty=false;
 const libraryBody=document.querySelector('.library tbody'),libraryHeading=document.querySelector('.library-head');
-libraryHeading.querySelector('.search').remove();
+libraryHeading.querySelector('.search')?.remove();
 const createProjectButton=document.createElement('button');createProjectButton.type='button';createProjectButton.className='primary';createProjectButton.textContent='Create Project';libraryHeading.appendChild(createProjectButton);
 projectSubnav.replaceChildren();
 const additionalButton=document.createElement('button');additionalButton.type='button';additionalButton.textContent='Additional Tools +';additionalButton.setAttribute('aria-expanded','false');additionalButton.setAttribute('aria-controls','additionalTools');
