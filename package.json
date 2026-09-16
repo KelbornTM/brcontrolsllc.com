@@ -1,6 +1,6 @@
 {
   "name": "brc-studio-site",
   "private": true,
-  "scripts": { "test": "playwright test", "test:ui": "playwright test --ui" },
+  "scripts": { "test": "node --test tests/worker.test.cjs && playwright test", "test:ui": "playwright test --ui" },
   "devDependencies": { "@playwright/test": "1.63.0" }
 }
