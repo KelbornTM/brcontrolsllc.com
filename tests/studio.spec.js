@@ -22,9 +22,10 @@ test('create, rename, number projects, and open a drawing element', async ({ pag
   const picker = page.getByRole('combobox', { name: 'Add drawing element to Pump Station' });
   await picker.selectOption('I/O List');
   await picker.selectOption('Title Block');
-  await expect(page.locator('.context-name')).toHaveText('Pump Station');
-  await expect(page.locator('#projectSubmenu button')).toHaveCount(2);
-  await page.locator('#projectSubmenu button').filter({ hasText: 'I/O List' }).click();
+  await page.locator('.element-list .element-button').filter({ hasText: 'I/O List' }).last().click();
+  await expect(page.locator('.project-nav-name')).toHaveText('Pump Station');
+  await expect(page.locator('.project-nav-elements button')).toHaveCount(2);
+  await page.locator('.project-nav-elements button').filter({ hasText: 'I/O List' }).click();
   await expect(page.locator('#pageTitle')).toHaveText('I/O List');
   await expect(page.locator('#pageDescription')).toHaveText('Project: Pump Station');
 });
