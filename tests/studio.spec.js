@@ -59,8 +59,13 @@ test('create, rename, number projects, and open a drawing element', async ({ pag
   await expect(page.locator('.project-nav-name')).toHaveText('Pump Station');
   await expect(page.locator('.project-nav-elements button')).toHaveCount(2);
   await page.locator('.project-nav-elements button').filter({ hasText: 'I/O List' }).click();
-  await expect(page.locator('#pageTitle')).toHaveText('I/O List');
+  await expect(page.locator('#pageTitle')).toHaveText('Pump Station / I/O List');
   await expect(page.locator('#pageDescription')).toHaveText('Project: Pump Station');
+  await page.locator('.project-nav-name').click();
+  await expect(page.locator('#pageTitle')).toHaveText('Pump Station');
+  await expect(page.locator('#pageDescription')).toHaveText('Project workspace');
+  await page.locator('.project-nav-elements button').filter({ hasText: 'Title Block' }).click();
+  await expect(page.locator('#pageTitle')).toHaveText('Pump Station / Title Block');
 });
 test('settings submenu and company toggle work', async ({ page }) => {
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
