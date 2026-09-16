@@ -1,0 +1,14 @@
+node_modules/**
+.git/**
+.github/**
+tests/**
+test-results/**
+playwright-report/**
+.wrangler/**
+package.json
+package-lock.json
+playwright.config.js
+wrangler.jsonc
+README.md
+TESTING.md
+.gitignore
