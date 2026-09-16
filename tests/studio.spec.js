@@ -1,9 +1,42 @@
 const { test, expect } = require('@playwright/test');
 test.beforeEach(async ({ page }) => {
+  let saved = { projects: [], revision: 0 };
+  await page.route('**/studio/api/projects', async route => {
+    if (route.request().method() === 'PUT') {
+      const next = route.request().postDataJSON();
+      if (next.revision !== saved.revision) return route.fulfill({ status: 409, json: { error: 'Conflict' } });
+      saved = { projects: next.projects, revision: saved.revision + 1 };
+      return route.fulfill({ json: { revision: saved.revision } });
+    }
+    return route.fulfill({ json: saved });
+  });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.__runtimeErrors = errors;
   await page.goto('/studio/index.html');
+});
+test('projects survive refresh after successful save', async ({ page }) => {
+  await page.getByRole('button', { name: 'Create Project', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Project name', exact: true }).press('Enter');
+  await expect(page.locator('#projectSaveStatus')).toContainText('Saved to your account.');
+  const dialogs = [];
+  page.on('dialog', async dialog => { dialogs.push(dialog.type()); await dialog.accept(); });
+  await page.reload();
+  await expect(page.locator('.folder-button')).toContainText('Project 1');
+  expect(dialogs).toEqual([]);
+});
+test('failed saves remain unsaved and warn before leaving', async ({ page }) => {
+  await page.route('**/studio/api/projects', async route => {
+    if (route.request().method() === 'PUT') return route.fulfill({ status: 503, json: { error: 'Database offline' } });
+    return route.fulfill({ json: { projects: [], revision: 0 } });
+  });
+  await page.getByRole('button', { name: 'Create Project', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Project name', exact: true }).press('Enter');
+  await expect(page.locator('#projectSaveStatus')).toContainText('Save failed');
+  const dialogPromise = page.waitForEvent('dialog');
+  const navigation = page.reload();
+  const dialog = await dialogPromise;
+  expect(dialog.type()).toBe('beforeunload'); await dialog.accept(); await navigation;
 });
 test.afterEach(async ({ page }) => {
   expect(page.__runtimeErrors).toEqual([]);
