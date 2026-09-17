@@ -12,8 +12,7 @@ progressStyle.textContent = `
 .rung-contact.done{color:#55dd91}.rung-coil{display:grid;justify-items:center;align-content:start;color:#ff7373;font:13px monospace;padding:16px 6px;gap:8px}.coil-symbol{width:44px;height:28px;border-left:3px solid currentColor;border-right:3px solid currentColor;border-radius:50%}.coil-tag{text-align:center}
 
 .rung-coil.ready{color:#55dd91;font-weight:700}.rung-empty{color:var(--muted);white-space:nowrap;padding:8px}
-.element-completion{display:flex;align-items:center;gap:12px;margin-top:24px;padding:16px;border:1px solid var(--line)}
-.element-completion input{width:20px;height:20px;accent-color:#55dd91}
+.element-status{display:inline-flex;align-items:center;gap:10px;color:#ff7373;background:#341719;border:1px solid currentColor;border-radius:4px;padding:10px 14px;font:700 12px monospace}.element-status:before{content:'';width:10px;height:10px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}.element-status.ready{color:#55dd91;background:#103322}.heading>div{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 @media(max-width:600px){.project-row td{padding:12px 8px}.project-rung{grid-template-columns:minmax(0,1fr) 136px auto}.project-rung>.folder-button{grid-column:1/-1}.rung-coil{font-size:11px;padding:12px 3px}.rung-contact{font-size:12px}}
 `;
 document.head.appendChild(progressStyle);
@@ -62,19 +61,31 @@ renderProjects = function(editProject) {
     line.insertBefore(middle, menu); line.insertBefore(coil, menu);
   });
 };
+const standaloneCompletion = new Map();
+const elementStatus = document.createElement('button');
+elementStatus.type = 'button'; elementStatus.className = 'element-status'; elementStatus.hidden = true;
+document.querySelector('.heading > div').appendChild(elementStatus);
+primaryNavigation.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => { elementStatus.hidden = true; }));
+const openProjectWithoutStatus = openProject;
+openProject = function(project) { elementStatus.hidden = true; openProjectWithoutStatus(project); };
 const openElementWithTitle = openElement;
 openElement = function(type, project) {
   openElementWithTitle(type, project);
-  if (!project) return;
-  const label = document.createElement('label'); label.className = 'element-completion';
-  const checkbox = document.createElement('input'); checkbox.type = 'checkbox';
-  checkbox.checked = project.completed?.[type] === true;
-  const text = document.createElement('span'); text.textContent = 'Done';
-  checkbox.addEventListener('change', () => {
-    if (!project.completed) project.completed = {};
-    project.completed[type] = checkbox.checked;
-    markProjectDirty(); renderProjects();
-  });
-  label.append(checkbox, text); elementPage.appendChild(label);
+  elementStatus.hidden = false;
+  function updateStatus() {
+    const ready = project ? project.completed?.[type] === true : standaloneCompletion.get(type) === true;
+    elementStatus.classList.toggle('ready', ready);
+    elementStatus.textContent = ready ? 'Ready for Generation' : 'In Development';
+    elementStatus.setAttribute('aria-pressed', String(ready));
+  }
+  elementStatus.onclick = () => {
+    if (project) {
+      if (!project.completed) project.completed = {};
+      project.completed[type] = project.completed[type] !== true;
+      markProjectDirty(); renderProjects();
+    } else standaloneCompletion.set(type, standaloneCompletion.get(type) !== true);
+    updateStatus();
+  };
+  updateStatus();
 };
 renderProjects();
