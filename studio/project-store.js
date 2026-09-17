@@ -14,7 +14,7 @@ function storageStatus(message, retry = false) {
 function serializedProjects() {
   return projectRecords.map(project => {
     if (!project.id) project.id = crypto.randomUUID();
-    return { id: project.id, name: project.name, elements: [...project.elements] };
+    return { id: project.id, name: project.name, elements: [...project.elements], completed: Object.fromEntries(project.elements.map(type => [type, project.completed?.[type] === true])) };
   });
 }
 async function apiRequest(method, body) {
