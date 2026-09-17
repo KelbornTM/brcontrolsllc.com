@@ -61,7 +61,12 @@ export function validateDocument(body) {
         new Set(project.elements).size !== project.elements.length || project.elements.some(type => !TYPES.includes(type)))
       reject(400, 'Invalid project name or drawing element.');
     ids.add(project.id);
-    return { id: project.id, name: project.name.trim(), elements: project.elements };
+    const completed = project.completed;
+    if (completed !== undefined && (!completed || typeof completed !== 'object' || Array.isArray(completed) ||
+        Object.entries(completed).some(([type, done]) => !project.elements.includes(type) || typeof done !== 'boolean')))
+      reject(400, 'Invalid drawing element completion.');
+    return { id: project.id, name: project.name.trim(), elements: project.elements,
+      ...(completed === undefined ? {} : { completed: Object.fromEntries(project.elements.map(type => [type, completed[type] === true])) }) };
   });
   return { revision: body.revision, projects };
 }
