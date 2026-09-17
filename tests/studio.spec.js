@@ -91,3 +91,34 @@ test('additional tools open without a project', async ({ page }) => {
   await expect(page.locator('#pageTitle')).toHaveText('BOM');
   await expect(page.locator('#pageDescription')).toBeHidden();
 });
+
+test('ladder completion saves across refresh and coil stays fixed while contacts scroll', async ({ page }) => {
+  await page.getByRole('button', { name: 'Create Project', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Project name', exact: true }).press('Enter');
+  const picker = page.getByRole('combobox', { name: 'Add drawing element to Project 1' });
+  for (const type of ['Title Block', 'Cover Page', 'Symbol Library', 'Panel Layout', 'I/O List', 'BOM']) await picker.selectOption(type);
+  await expect(page.locator('.library .toolbar, .library thead')).toHaveCount(0);
+  await expect(page.locator('.library-head #projectCount')).toContainText('1 PROJECTS');
+  await expect(page.locator('.rung-coil')).not.toHaveClass(/ready/);
+  await expect(page.locator('.rung-contact.done')).toHaveCount(0);
+  for (const type of ['Title Block', 'Cover Page', 'Symbol Library', 'Panel Layout', 'I/O List', 'BOM']) {
+    await page.locator('.rung-contact').filter({ hasText: type }).click();
+    await page.getByRole('button', { name: 'In Development', exact: true }).click();
+    await page.getByRole('button', { name: 'Projects', exact: true }).click();
+  }
+  await expect(page.locator('.rung-coil')).toHaveClass(/ready/);
+  await expect(page.locator('.rung-contact.done')).toHaveCount(6);
+  const before = await page.locator('.rung-coil').boundingBox();
+  await page.locator('.rung-middle').evaluate(el => { el.scrollLeft = el.scrollWidth; });
+  const after = await page.locator('.rung-coil').boundingBox();
+  expect(after.x).toBe(before.x);
+  await expect(page.locator('#projectSaveStatus')).toContainText('Saved to your account.');
+  await page.reload();
+  await page.getByRole('button', { name: 'Projects', exact: true }).click();
+  await expect(page.locator('.rung-coil')).toHaveClass(/ready/);
+  await page.locator('.rung-contact').filter({ hasText: 'Title Block' }).click();
+  await expect(page.getByRole('button', { name: 'Ready for Generation', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Ready for Generation', exact: true }).click();
+  await page.getByRole('button', { name: 'Projects', exact: true }).click();
+  await expect(page.locator('.rung-coil')).not.toHaveClass(/ready/);
+});

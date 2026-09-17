@@ -16,6 +16,8 @@ test('rejects invalid projects and duplicate IDs', async () => {
   assert.equal(validateDocument({ projects: [project], revision: 0 }).projects[0].name, 'Project 1');
   assert.throws(() => validateDocument({ projects: [project, project], revision: 0 }));
   assert.throws(() => validateDocument({ projects: [{ ...project, elements: ['Unknown'] }], revision: 0 }));
+  assert.throws(() => validateDocument({ projects: [{ ...project, completed: { 'I/O List': 'yes' } }], revision: 0 }));
+  assert.throws(() => validateDocument({ projects: [{ ...project, completed: { 'Title Block': true } }], revision: 0 }));
 });
 test('verified identities save, load, detect conflicts, and delete project metadata', async () => {
   const { DatabaseSync } = require('node:sqlite');
@@ -52,7 +54,7 @@ test('verified identities save, load, detect conflicts, and delete project metad
     assert.equal((await call('GET', null, await token({ email: 'other@example.com' }))).status, 403);
     assert.equal((await call('GET', null, jwt.slice(0, -10) + 'AAAAAAAAAA')).status, 401);
     assert.deepEqual(await (await call('GET')).json(), { projects: [], revision: 0 });
-    const projects = [{ id: 'p1', name: 'Pump Station', elements: ['I/O List'] }];
+    const projects = [{ id: 'p1', name: 'Pump Station', elements: ['I/O List'], completed: { 'I/O List': true } }];
     assert.equal((await call('PUT', { projects, revision: 0 })).status, 200);
     assert.deepEqual(await (await call('GET')).json(), { projects, revision: 1 });
     assert.equal((await call('PUT', { projects: [], revision: 0 })).status, 409);
