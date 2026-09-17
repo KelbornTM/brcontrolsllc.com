@@ -114,6 +114,7 @@ test('ladder completion saves across refresh and coil stays fixed while contacts
   expect(after.x).toBe(before.x);
   await expect(page.locator('#projectSaveStatus')).toContainText('Saved to your account.');
   await page.reload();
+  await page.getByRole('button', { name: 'Projects', exact: true }).click();
   await expect(page.locator('.rung-coil')).toHaveClass(/ready/);
   await page.locator('.rung-contact').filter({ hasText: 'Title Block' }).click();
   await expect(page.getByRole('checkbox', { name: 'Done', exact: true })).toBeChecked();
