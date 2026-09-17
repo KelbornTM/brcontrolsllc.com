@@ -8,9 +8,9 @@ progressStyle.textContent = `
 .rung-middle{min-width:0;overflow-x:auto;padding:16px 0;scrollbar-width:thin}
 .rung-contacts{display:flex;align-items:center;min-width:100%;width:max-content}
 .rung-wire{height:2px;background:var(--muted);min-width:22px;flex:1}
-.rung-contact{position:relative;flex:none;border:0;border-left:3px solid currentColor;border-right:3px solid currentColor;background:#081320;color:#ff7373;padding:8px 12px;white-space:nowrap;font:13px monospace}
-.rung-contact.done{color:#55dd91}.rung-coil{display:flex;align-items:center;color:#ff7373;font:13px monospace;padding:12px 6px;gap:8px}
-.rung-coil:before,.rung-coil:after{content:'';width:12px;height:38px;border:2px solid currentColor;border-top:0;border-bottom:0;border-radius:50%;flex:none}
+.rung-contact{position:relative;flex:none;border:0;background:#081320;color:#ff7373;padding:0 12px;white-space:nowrap;font:13px monospace;display:grid;justify-items:center;gap:8px}.contact-symbol{width:34px;height:28px;border-left:3px solid currentColor;border-right:3px solid currentColor}.contact-tag{display:block}.rung-wire{align-self:flex-start;margin-top:14px}
+.rung-contact.done{color:#55dd91}.rung-coil{display:grid;justify-items:center;align-content:start;color:#ff7373;font:13px monospace;padding:16px 6px;gap:8px}.coil-symbol{width:44px;height:28px;border-left:3px solid currentColor;border-right:3px solid currentColor;border-radius:50%}.coil-tag{text-align:center}
+
 .rung-coil.ready{color:#55dd91;font-weight:700}.rung-empty{color:var(--muted);white-space:nowrap;padding:8px}
 .element-completion{display:flex;align-items:center;gap:12px;margin-top:24px;padding:16px;border:1px solid var(--line)}
 .element-completion input{width:20px;height:20px;accent-color:#55dd91}
@@ -43,7 +43,9 @@ renderProjects = function(editProject) {
       const contact = document.createElement('button');
       contact.type = 'button';
       contact.className = 'rung-contact' + (done ? ' done' : '');
-      contact.textContent = type;
+      const symbol = document.createElement('span'); symbol.className = 'contact-symbol'; symbol.setAttribute('aria-hidden', 'true');
+      const tag = document.createElement('span'); tag.className = 'contact-tag'; tag.textContent = type;
+      contact.append(symbol, tag);
       contact.setAttribute('aria-label', type + ': ' + (done ? 'Done' : 'Not done'));
       contact.addEventListener('click', () => openElement(type, project));
       contacts.appendChild(contact); wire();
@@ -52,7 +54,9 @@ renderProjects = function(editProject) {
     const ready = project.elements.length > 0 && project.elements.every(type => project.completed?.[type] === true);
     const coil = document.createElement('div');
     coil.className = 'rung-coil' + (ready ? ' ready' : '');
-    coil.textContent = 'Ready for Generation';
+    const coilSymbol = document.createElement('span'); coilSymbol.className = 'coil-symbol'; coilSymbol.setAttribute('aria-hidden', 'true');
+    const coilTag = document.createElement('span'); coilTag.className = 'coil-tag'; coilTag.textContent = 'Ready for Generation';
+    coil.append(coilSymbol, coilTag);
     coil.setAttribute('role', 'status');
     coil.setAttribute('aria-label', ready ? 'Ready for Generation' : 'Not ready for generation');
     line.insertBefore(middle, menu); line.insertBefore(coil, menu);
