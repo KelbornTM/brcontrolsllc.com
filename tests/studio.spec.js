@@ -14,11 +14,16 @@ test.beforeEach(async ({ page }) => {
   page.on('pageerror', error => errors.push(error.message));
   page.__runtimeErrors = errors;
   await page.goto('/studio/index.html');
+  await expect(page.locator('main > .cards')).toBeHidden();
+  await expect(page.getByRole('button', { name: '+ New Project', exact: true })).toHaveCount(0);
+  await expect(page.getByText('Project metadata is account-backed when connected.', { exact: false })).toHaveCount(0);
+  await expect(page.locator('#pageDescription')).toBeHidden();
 });
 test('projects survive refresh after successful save', async ({ page }) => {
   await page.getByRole('button', { name: 'Create Project', exact: true }).click();
   await page.getByRole('textbox', { name: 'Project name', exact: true }).press('Enter');
   await expect(page.locator('#projectSaveStatus')).toContainText('Saved to your account.');
+  await expect(page.locator('#projectSaveStatus')).toBeHidden();
   const dialogs = [];
   page.on('dialog', async dialog => { dialogs.push(dialog.type()); await dialog.accept(); });
   await page.reload();
@@ -33,6 +38,7 @@ test('failed saves remain unsaved and warn before leaving', async ({ page }) => 
   await page.getByRole('button', { name: 'Create Project', exact: true }).click();
   await page.getByRole('textbox', { name: 'Project name', exact: true }).press('Enter');
   await expect(page.locator('#projectSaveStatus')).toContainText('Save failed');
+  await expect(page.locator('#projectSaveStatus')).toBeVisible();
   const dialogPromise = page.waitForEvent('dialog');
   const navigation = page.reload();
   const dialog = await dialogPromise;
@@ -60,10 +66,10 @@ test('create, rename, number projects, and open a drawing element', async ({ pag
   await expect(page.locator('.project-nav-elements button')).toHaveCount(2);
   await page.locator('.project-nav-elements button').filter({ hasText: 'I/O List' }).click();
   await expect(page.locator('#pageTitle')).toHaveText('Pump Station / I/O List');
-  await expect(page.locator('#pageDescription')).toHaveText('Project: Pump Station');
+  await expect(page.locator('#pageDescription')).toBeHidden();
   await page.locator('.project-nav-name').click();
   await expect(page.locator('#pageTitle')).toHaveText('Pump Station');
-  await expect(page.locator('#pageDescription')).toHaveText('Project workspace');
+  await expect(page.locator('#pageDescription')).toBeHidden();
   await page.locator('.project-nav-elements button').filter({ hasText: 'Title Block' }).click();
   await expect(page.locator('#pageTitle')).toHaveText('Pump Station / Title Block');
 });
@@ -83,5 +89,5 @@ test('additional tools open without a project', async ({ page }) => {
   await page.getByRole('button', { name: 'Additional Tools +' }).click();
   await page.locator('#additionalTools').getByRole('button', { name: 'BOM', exact: true }).click();
   await expect(page.locator('#pageTitle')).toHaveText('BOM');
-  await expect(page.locator('#pageDescription')).toContainText('Standalone tool');
+  await expect(page.locator('#pageDescription')).toBeHidden();
 });

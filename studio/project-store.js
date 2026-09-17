@@ -5,7 +5,12 @@ const saveMessage = document.createElement('span');
 const retrySave = document.createElement('button'); retrySave.type = 'button'; retrySave.className = 'secondary'; retrySave.textContent = 'Retry'; retrySave.hidden = true;
 saveStatus.append(saveMessage, retrySave); main.insertBefore(saveStatus, document.querySelector('.cards'));
 let storageReady = false, storageRevision = 0, changeSequence = 0, saving = false, saveTimer = null, conflict = false;
-function storageStatus(message, retry = false) { saveMessage.textContent = message; retrySave.hidden = !retry; }
+function storageStatus(message, retry = false) {
+  saveMessage.textContent = message;
+  retrySave.hidden = !retry;
+  // Routine autosave stays quiet; failures remain visible and actionable.
+  saveStatus.hidden = !(/^(Save failed:|Could not load projects:|Projects are not loaded\.)/.test(message));
+}
 function serializedProjects() {
   return projectRecords.map(project => {
     if (!project.id) project.id = crypto.randomUUID();
@@ -25,7 +30,7 @@ async function apiRequest(method, body) {
 function refreshProjectWarning() {
   unsavedNotice.hidden = !(formDirty || projectDataDirty);
   unsavedNotice.textContent = projectDataDirty
-    ? 'Project changes are not saved yet. Wait for Saved before refreshing or closing this page.'
+    ? 'Project changes are not saved yet. Wait for saving to finish before refreshing or closing this page.'
     : 'Unsaved prototype account/settings entries will be lost if you refresh or close this page.';
 }
 async function saveProjects() {
@@ -68,6 +73,5 @@ async function loadProjects() {
 retrySave.addEventListener('click', () => storageReady ? saveProjects() : loadProjects());
 panels.addEventListener('input', refreshProjectWarning); panels.addEventListener('change', refreshProjectWarning);
 document.querySelector('.bottom span:last-child').textContent = 'Project metadata autosaves; prototype settings do not.';
-document.querySelector('main > .notice').textContent = 'Project metadata is account-backed when connected. Drawing editors, generation, uploads, billing, and account settings remain in development.';
 deleteDialog.querySelectorAll('p')[1].textContent = 'This removes the project or element from your account after the save succeeds. This cannot be undone.';
 loadProjects();
