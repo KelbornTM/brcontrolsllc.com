@@ -103,7 +103,7 @@ test('ladder completion saves across refresh and coil stays fixed while contacts
   await expect(page.locator('.rung-contact.done')).toHaveCount(0);
   for (const type of ['Title Block', 'Cover Page', 'Symbol Library', 'Panel Layout', 'I/O List', 'BOM']) {
     await page.locator('.rung-contact').filter({ hasText: type }).click();
-    await page.getByRole('checkbox', { name: 'Done', exact: true }).check();
+    await page.getByRole('button', { name: 'In Development', exact: true }).click();
     await page.getByRole('button', { name: 'Projects', exact: true }).click();
   }
   await expect(page.locator('.rung-coil')).toHaveClass(/ready/);
@@ -117,8 +117,8 @@ test('ladder completion saves across refresh and coil stays fixed while contacts
   await page.getByRole('button', { name: 'Projects', exact: true }).click();
   await expect(page.locator('.rung-coil')).toHaveClass(/ready/);
   await page.locator('.rung-contact').filter({ hasText: 'Title Block' }).click();
-  await expect(page.getByRole('checkbox', { name: 'Done', exact: true })).toBeChecked();
-  await page.getByRole('checkbox', { name: 'Done', exact: true }).uncheck();
+  await expect(page.getByRole('button', { name: 'Ready for Generation', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Ready for Generation', exact: true }).click();
   await page.getByRole('button', { name: 'Projects', exact: true }).click();
   await expect(page.locator('.rung-coil')).not.toHaveClass(/ready/);
 });
