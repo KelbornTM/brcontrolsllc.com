@@ -3,15 +3,21 @@ const progressStyle = document.createElement('style');
 progressStyle.textContent = `
 .library > .table-wrap{overflow:visible}.library table{min-width:0;table-layout:fixed}
 #projectCount{margin-left:auto;color:var(--muted);font:11px monospace}
-.library-head .primary{margin-left:0}.project-rung{display:grid;grid-template-columns:minmax(130px,210px) minmax(0,1fr) 170px auto;align-items:center;gap:0}
+.library-head .primary{margin-left:0}.project-rung{--ladder-line:#7582d2;display:grid;grid-template-columns:minmax(130px,210px) minmax(0,1fr) 180px auto;align-items:center;gap:0}
 .project-rung .folder-button{overflow-wrap:anywhere}
-.rung-middle{min-width:0;overflow-x:auto;padding:16px 0;scrollbar-width:thin}
-.rung-contacts{display:flex;align-items:center;min-width:100%;width:max-content}
-.rung-wire{height:2px;background:var(--muted);min-width:22px;flex:1}
-.rung-contact{position:relative;flex:none;border:0;background:#081320;color:#ff7373;padding:0 12px;white-space:nowrap;font:13px monospace;display:grid;justify-items:center;gap:8px}.contact-symbol{width:34px;height:28px;border-left:3px solid currentColor;border-right:3px solid currentColor}.contact-tag{display:block}.rung-wire{align-self:flex-start;margin-top:14px}
-.rung-contact.done{color:#55dd91}.rung-coil{display:grid;justify-items:center;align-content:start;color:#ff7373;font:13px monospace;padding:16px 6px;gap:8px}.coil-symbol{width:44px;height:28px;border-left:3px solid currentColor;border-right:3px solid currentColor;border-radius:50%}.coil-tag{text-align:center}
-
-.rung-coil.ready{color:#55dd91;font-weight:700}.rung-empty{color:var(--muted);white-space:nowrap;padding:8px}
+.rung-middle{min-width:0;overflow-x:auto;padding:13px 0 9px;scrollbar-width:thin;scrollbar-color:#536181 #0a1421}
+.rung-contacts{display:flex;align-items:flex-start;min-width:100%;width:max-content;border-left:2px solid var(--ladder-line);padding-top:3px}
+.rung-wire{height:1px;background:var(--ladder-line);min-width:24px;flex:1;align-self:flex-start;margin-top:15px}
+.rung-contact{position:relative;flex:none;border:0;background:transparent;color:#ff656d;padding:0 5px;white-space:nowrap;font:12px monospace;display:grid;justify-items:center;gap:4px}
+.contact-symbol{position:relative;display:block;width:52px;height:31px;color:inherit;background:linear-gradient(var(--ladder-line),var(--ladder-line)) center/100% 1px no-repeat}
+.contact-symbol:before,.contact-symbol:after{content:'';position:absolute;top:5px;width:2px;height:21px;background:currentColor;box-shadow:0 0 4px currentColor}
+.contact-symbol:before{left:19px}.contact-symbol:after{right:19px}.contact-tag{display:block;color:currentColor;line-height:1.15;text-align:center}
+.rung-contact.done{color:#35e779}.rung-contact.done .contact-symbol{background:linear-gradient(#35e779,#35e779) center/100% 2px no-repeat}
+.rung-coil{position:relative;display:grid;justify-items:center;align-content:start;color:#ff656d;font:12px monospace;padding:12px 7px 8px;gap:4px;border-left:1px solid var(--ladder-line)}
+.coil-symbol{position:relative;display:block;width:62px;height:32px;background:linear-gradient(var(--ladder-line),var(--ladder-line)) center/100% 1px no-repeat}
+.coil-symbol:before{content:'(     )';position:absolute;inset:-6px 0 0;display:grid;place-items:center;color:currentColor;font:30px/32px monospace;letter-spacing:-5px;text-shadow:0 0 4px currentColor}
+.coil-tag{max-width:165px;color:currentColor;line-height:1.15;text-align:center}.rung-coil.ready{color:#35e779;font-weight:700}.rung-coil.ready .coil-symbol{background:linear-gradient(#35e779,#35e779) center/100% 2px no-repeat}
+.rung-empty{color:var(--muted);white-space:nowrap;padding:7px}
 .element-status{display:inline-flex;align-items:center;gap:10px;color:#ff7373;background:#341719;border:1px solid currentColor;border-radius:4px;padding:10px 14px;font:700 12px monospace}.element-status:before{content:'';width:10px;height:10px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}.element-status.ready{color:#55dd91;background:#103322}.heading>div{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 @media(max-width:600px){.project-row td{padding:12px 8px}.project-rung{grid-template-columns:minmax(0,1fr) 136px auto}.project-rung>.folder-button{grid-column:1/-1}.rung-coil{font-size:11px;padding:12px 3px}.rung-contact{font-size:12px}}
 `;
